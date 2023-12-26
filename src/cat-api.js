@@ -21,5 +21,3 @@ function getData(url) {
     })
     .catch(error => console.log(error));
 }
-
-// https://api.thecatapi.com/v1/images/search?breed_ids=ідентифікатор_породи
