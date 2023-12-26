@@ -10,8 +10,9 @@ const refs = {
   catInfoEl: document.querySelector('.cat-info'),
 };
 
-// fetchCatByBreed('abys');
-// fetchBreeds();
+fetchBreeds().then(data => {
+  console.log(data);
+});
 
 // .then(catList => {
 //   new SlimSelect({
