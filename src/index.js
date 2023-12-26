@@ -11,12 +11,14 @@ const refs = {
 };
 
 fetchBreeds().then(data => {
-  console.log(data);
-});
+  const breedsNames = [];
 
-// .then(catList => {
-//   new SlimSelect({
-//     select: 'select.breed-select',
-//     data: catList,
-//   });
-// })
+  data.forEach(breed => {
+    breedsNames.push({ text: breed.name, value: breed.id });
+  });
+
+  new SlimSelect({
+    select: 'select.breed-select',
+    data: breedsNames,
+  });
+});
