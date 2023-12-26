@@ -1,5 +1,6 @@
-import { fetchBreeds, fetchCatByBreed } from './cat-api';
 import SlimSelect from 'slim-select';
+import Notiflix from 'notiflix';
+import { fetchBreeds, fetchCatByBreed } from './cat-api';
 
 import 'slim-select/dist/slimselect.css';
 
@@ -10,15 +11,23 @@ const refs = {
   catInfoEl: document.querySelector('.cat-info'),
 };
 
-fetchBreeds().then(data => {
-  const breedsNames = [];
+fetchBreeds()
+  .then(data => {
+    const breedsNames = [];
 
-  data.forEach(breed => {
-    breedsNames.push({ text: breed.name, value: breed.id });
-  });
+    data.forEach(breed => {
+      breedsNames.push({ text: breed.name, value: breed.id });
+    });
 
-  new SlimSelect({
-    select: 'select.breed-select',
-    data: breedsNames,
+    new SlimSelect({
+      select: 'select.breed-select',
+      data: breedsNames,
+    });
+  })
+  .catch(error => {
+    console.log(error);
+
+    Notiflix.Notify.failure(
+      'Oops! Something went wrong! Try reloading the page!'
+    );
   });
-});
