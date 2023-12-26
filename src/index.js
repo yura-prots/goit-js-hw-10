@@ -11,23 +11,35 @@ const refs = {
   catInfoEl: document.querySelector('.cat-info'),
 };
 
+const selectName = `.${refs.selectEl.className}`;
+const breedsNames = [];
+
 fetchBreeds()
   .then(data => {
-    const breedsNames = [];
-
-    data.forEach(breed => {
+    data.map(breed => {
       breedsNames.push({ text: breed.name, value: breed.id });
     });
 
-    new SlimSelect({
-      select: 'select.breed-select',
-      data: breedsNames,
-    });
+    return breedsNames;
+  })
+  .then(breedsNames => {
+    setSlimSelect(selectName, breedsNames);
   })
   .catch(error => {
-    console.log(error);
-
-    Notiflix.Notify.failure(
-      'Oops! Something went wrong! Try reloading the page!'
-    );
+    onFetchError(error);
   });
+
+function setSlimSelect(selectId, selectData) {
+  new SlimSelect({
+    select: selectId,
+    data: selectData,
+  });
+}
+
+function onFetchError(error) {
+  console.log(error);
+
+  Notiflix.Notify.failure(
+    'Oops! Something went wrong! Try reloading the page!'
+  );
+}
