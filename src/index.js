@@ -11,7 +11,6 @@ const refs = {
   catInfoEl: document.querySelector('.cat-info'),
 };
 
-const selectName = `.${refs.selectEl.className}`;
 const breedsNames = [];
 
 fetchBreeds()
@@ -23,6 +22,8 @@ fetchBreeds()
     return breedsNames;
   })
   .then(breedsNames => {
+    const selectName = `.${refs.selectEl.className}`;
+
     setSlimSelect(selectName, breedsNames);
   })
   .catch(error => {
@@ -41,12 +42,12 @@ function setSlimSelect(selectId, selectData) {
   });
 }
 
-function onSelectChange(value) {
-  fetchCatByBreed(value[0].value)
+function onSelectChange(selectValue) {
+  fetchCatByBreed(selectValue[0].value)
     .then(response => {
       const template = templateCreator(
         response[0].url,
-        value[0].text,
+        selectValue[0].text,
         response[0].breeds[0].description,
         response[0].breeds[0].temperament
       );
