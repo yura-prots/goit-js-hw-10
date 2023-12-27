@@ -44,17 +44,30 @@ function setSlimSelect(selectId, selectData) {
 function onSelectChange(value) {
   fetchCatByBreed(value[0].value)
     .then(response => {
-      imageCreator(response[0].url, value[0].text);
+      templateCreator(
+        response[0].url,
+        value[0].text,
+        response[0].breeds[0].description,
+        response[0].breeds[0].temperament
+      );
     })
     .catch(error => {
       onFetchError(error);
     });
 }
 
-function imageCreator(imageUrl, imageAlt) {
-  const imgEl = `<img src="${imageUrl}" alt="${imageAlt}" />`;
+function templateCreator(imageUrl, imageAlt, breedDes, breedTemp) {
+  const template = `<div>
+                      <img src="${imageUrl}" alt="${imageAlt}" width="400"/>
+                    </div>
+                    <div>
+                      <h1>${imageAlt}</h1>
+                      <p>${breedDes}</p>
+                      <p><b>Temperament:</b> ${breedTemp}</p>
+                    </div>
+                  `;
 
-  refs.catInfoEl.insertAdjacentHTML('afterbegin', imgEl);
+  refs.catInfoEl.insertAdjacentHTML('afterbegin', template);
 }
 
 function onFetchError(error) {
