@@ -43,6 +43,8 @@ function setSlimSelect(selectId, selectData) {
     data: selectData,
     events: {
       afterChange: newVal => {
+        refs.catInfoEl.innerHTML = '';
+
         onSelectChange(newVal);
       },
     },
