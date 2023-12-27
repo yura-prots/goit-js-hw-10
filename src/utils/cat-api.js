@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import Notiflix from 'notiflix';
 import axios from 'axios';
 
 const BASE_URL = 'https://api.thecatapi.com/v1';
@@ -9,6 +10,14 @@ export function fetchBreeds() {
 
 export function fetchCatByBreed(breedId) {
   return getData(`${BASE_URL}/images/search?breed_ids=${breedId}`);
+}
+
+export function onFetchError(error) {
+  console.log(error);
+
+  Notiflix.Notify.failure(
+    'Oops! Something went wrong! Try reloading the page!'
+  );
 }
 
 function getData(url) {

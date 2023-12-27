@@ -1,6 +1,6 @@
 import SlimSelect from 'slim-select';
-import Notiflix from 'notiflix';
-import { fetchBreeds, fetchCatByBreed } from './cat-api';
+import { fetchBreeds, fetchCatByBreed, onFetchError } from './utils/cat-api';
+import { templateCreator } from './utils/template';
 
 import 'slim-select/dist/slimselect.css';
 
@@ -44,36 +44,16 @@ function setSlimSelect(selectId, selectData) {
 function onSelectChange(value) {
   fetchCatByBreed(value[0].value)
     .then(response => {
-      templateCreator(
+      const template = templateCreator(
         response[0].url,
         value[0].text,
         response[0].breeds[0].description,
         response[0].breeds[0].temperament
       );
+
+      refs.catInfoEl.insertAdjacentHTML('afterbegin', template);
     })
     .catch(error => {
       onFetchError(error);
     });
-}
-
-function templateCreator(imageUrl, imageAlt, breedDes, breedTemp) {
-  const template = `<div>
-                      <img src="${imageUrl}" alt="${imageAlt}" width="400"/>
-                    </div>
-                    <div>
-                      <h1>${imageAlt}</h1>
-                      <p>${breedDes}</p>
-                      <p><b>Temperament:</b> ${breedTemp}</p>
-                    </div>
-                  `;
-
-  refs.catInfoEl.insertAdjacentHTML('afterbegin', template);
-}
-
-function onFetchError(error) {
-  console.log(error);
-
-  Notiflix.Notify.failure(
-    'Oops! Something went wrong! Try reloading the page!'
-  );
 }
