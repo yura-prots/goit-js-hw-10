@@ -33,6 +33,13 @@ function setSlimSelect(selectId, selectData) {
   new SlimSelect({
     select: selectId,
     data: selectData,
+    events: {
+      afterChange: newVal => {
+        onSelectChange(newVal);
+
+        // return false; // this will stop the change from happening
+      },
+    },
   });
 }
 
@@ -42,4 +49,11 @@ function onFetchError(error) {
   Notiflix.Notify.failure(
     'Oops! Something went wrong! Try reloading the page!'
   );
+}
+
+function onSelectChange(value) {
+  fetchCatByBreed(value[0].value).then(response => {
+    // const catImg = document.createElement();
+    refs.catInfoEl.innerHTML = `<img src="${response[0].url}" alt="${value[0].text}">`;
+  });
 }
