@@ -11,10 +11,16 @@ const refs = {
   catInfoEl: document.querySelector('.cat-info'),
 };
 
+refs.selectEl.classList.add('is-hidden');
+refs.errorEl.classList.add('is-hidden');
+refs.loaderEl.textContent = '';
+
 const breedsNames = [];
 
 fetchBreeds()
   .then(data => {
+    refs.loaderEl.classList.add('is-hidden');
+
     data.map(breed => {
       breedsNames.push({ text: breed.name, value: breed.id });
     });
@@ -22,6 +28,7 @@ fetchBreeds()
     return breedsNames;
   })
   .then(breedsNames => {
+    refs.selectEl.classList.remove('is-hidden');
     const selectName = `.${refs.selectEl.className}`;
 
     setSlimSelect(selectName, breedsNames);
@@ -43,8 +50,12 @@ function setSlimSelect(selectId, selectData) {
 }
 
 function onSelectChange(selectValue) {
+  refs.loaderEl.classList.remove('is-hidden');
+
   fetchCatByBreed(selectValue[0].value)
     .then(response => {
+      refs.loaderEl.classList.add('is-hidden');
+
       const template = templateCreator(
         response[0].url,
         selectValue[0].text,
