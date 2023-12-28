@@ -6,11 +6,17 @@ import refs from './utils/refs';
 import 'slim-select/dist/slimselect.css';
 
 const { selectEl, loaderEl, errorEl, catInfoEl } = refs;
-
+const selectName = `.${selectEl.className}`;
 const breedsNames = [];
+
+loaderEl.textContent = '';
+errorEl.classList.add('is-hidden');
+catInfoEl.classList.add('is-hidden');
 
 fetchBreeds()
   .then(data => {
+    loaderEl.classList.add('is-hidden');
+
     data.map(breed => {
       breedsNames.push({ text: breed.name, value: breed.id });
     });
@@ -18,13 +24,9 @@ fetchBreeds()
     return breedsNames;
   })
   .then(breedsNames => {
-    const selectName = `.${selectEl.className}`;
-
     setSlimSelect(selectName, breedsNames);
   })
-  .catch(error => {
-    onFetchError(error);
-  });
+  .catch(onFetchError);
 
 function setSlimSelect(selectId, selectData) {
   new SlimSelect({
@@ -32,6 +34,9 @@ function setSlimSelect(selectId, selectData) {
     data: selectData,
     events: {
       afterChange: newVal => {
+        loaderEl.classList.remove('is-hidden');
+        catInfoEl.innerHTML = '';
+
         onSelectChange(newVal);
       },
     },
@@ -49,6 +54,9 @@ function onSelectChange(selectValue) {
       );
 
       catInfoEl.insertAdjacentHTML('afterbegin', template);
+
+      loaderEl.classList.add('is-hidden');
+      catInfoEl.classList.remove('is-hidden');
     })
     .catch(error => {
       onFetchError(error);
