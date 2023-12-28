@@ -1,15 +1,11 @@
 import SlimSelect from 'slim-select';
 import { fetchBreeds, fetchCatByBreed, onFetchError } from './utils/cat-api';
 import { templateCreator } from './utils/template';
+import refs from './utils/refs';
 
 import 'slim-select/dist/slimselect.css';
 
-const refs = {
-  selectEl: document.querySelector('select.breed-select'),
-  loaderEl: document.querySelector('p.loader'),
-  errorEl: document.querySelector('p.error'),
-  catInfoEl: document.querySelector('.cat-info'),
-};
+const { selectEl, loaderEl, errorEl, catInfoEl } = refs;
 
 const breedsNames = [];
 
@@ -22,7 +18,7 @@ fetchBreeds()
     return breedsNames;
   })
   .then(breedsNames => {
-    const selectName = `.${refs.selectEl.className}`;
+    const selectName = `.${selectEl.className}`;
 
     setSlimSelect(selectName, breedsNames);
   })
@@ -52,7 +48,7 @@ function onSelectChange(selectValue) {
         response[0].breeds[0].temperament
       );
 
-      refs.catInfoEl.insertAdjacentHTML('afterbegin', template);
+      catInfoEl.insertAdjacentHTML('afterbegin', template);
     })
     .catch(error => {
       onFetchError(error);
